@@ -447,6 +447,8 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             animation: popupSlideIn 0.3s ease-out;
             position: relative;
+            max-height: 80vh;
+            overflow: hidden;
         }
 
         .popup-header {
@@ -1130,6 +1132,23 @@
                             <div class="dropdown-item" onclick="selectCourse('CPS')">CPS</div>
                         </div>
                     </div>
+
+                    <!-- Subject Type Dropdown -->
+                    <div class="filter-dropdown" id="subjectDropdownBox">
+                        <button class="dropdown-button" onclick="toggleDropdown('subject')">
+                            <span id="subjectSelected">All Subject</span>
+                            <span class="dropdown-arrow">▼</span>
+                        </button>
+                        <div class="dropdown-menu" id="subjectDropdown">
+                            <div class="dropdown-item" onclick="selectSubject('All Subject')">All Subject</div>
+                            <div class="dropdown-item" onclick="selectSubject('Physics')">Physics</div>
+                            <div class="dropdown-item" onclick="selectSubject('Chemistry')">Chemistry</div>
+                            <div class="dropdown-item" onclick="selectSubject('Mathematics')">Mathematics</div>
+                            <div class="dropdown-item" onclick="selectSubject('ICT')">ICT</div>
+                            <div class="dropdown-item" onclick="selectSubject('Biology')">Biology</div>
+                            <div class="dropdown-item" onclick="selectSubject('English')">English</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1169,6 +1188,24 @@
                 <div class="popup-item" onclick="selectCourseFromPopup('Udavsh')">Udavsh</div>
                 <div class="popup-item" onclick="selectCourseFromPopup('Bondi Pathshala')">Bondi Pathshala</div>
                 <div class="popup-item" onclick="selectCourseFromPopup('CPS')">CPS</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="popup-overlay" id="subjectPopup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3 class="popup-title">Select Subject</h3>
+                <button class="popup-close" onclick="closePopup('subject')">×</button>
+            </div>
+            <div class="popup-items">
+                <div class="popup-item" onclick="selectSubjectFromPopup('All Subject')">All Subject</div>
+                <div class="popup-item" onclick="selectSubjectFromPopup('Physics')">Physics</div>
+                <div class="popup-item" onclick="selectSubjectFromPopup('Chemistry')">Chemistry</div>
+                <div class="popup-item" onclick="selectSubjectFromPopup('Mathematics')">Mathematics</div>
+                <div class="popup-item" onclick="selectSubjectFromPopup('ICT')">ICT</div>
+                <div class="popup-item" onclick="selectSubjectFromPopup('Biology')">Biology</div>
+                <div class="popup-item" onclick="selectSubjectFromPopup('English')">English</div>
             </div>
         </div>
     </div>
@@ -1266,13 +1303,14 @@
     </footer>
 
     <script>
-        // Mock course data
+        // Mock course data with FIXED subject property
         const mockCourses = [
             {
                 id: 1,
                 title: "Physics Cycle-1 by Apurbo Mashrur Apar",
                 description: "প্রথম পত্র- অধ্যায় (১,২,৩) , 30+ Classes, 5 Exams",
                 category: "Physics",
+                subject: "Physics",
                 grade: "HSC 26",
                 courseType: "ACS",
                 price: 2500,
@@ -1287,6 +1325,7 @@
                 title: "Physics Cycle-2 by Apurbo Mashrur Apar",
                 description: "প্রথম পত্র- অধ্যায় (৪,৫,৬,৭)",
                 category: "Physics",
+                subject: "Physics",
                 grade: "HSC 26",
                 courseType: "ACS",
                 price: 1800,
@@ -1301,6 +1340,7 @@
                 title: "Physics Cycle-3 by Apurbo Mashrur Apar",
                 description: "প্রথম পত্র- অধ্যায় (৮,৯) , দ্বিতীয় পত্র- অধ্যায় (৬,৭)",
                 category: "Physics",
+                subject: "Physics",
                 grade: "HSC 26",
                 courseType: "ACS",
                 price: 2200,
@@ -1315,6 +1355,7 @@
                 title: "Physics Cycle-4 by Apurbo Mashrur Apar",
                 description: "প্রথম পত্র- অধ্যায় ১০, দ্বিতীয় পত্র- অধ্যায় (৯,১১)",
                 category: "Physics",
+                subject: "Physics",
                 grade: "HSC 26",
                 courseType: "ACS",
                 price: 2000,
@@ -1329,6 +1370,7 @@
                 title: "Physics Cycle-5 by Apurbo Mashrur Apar",
                 description: "দ্বিতীয় পত্র- অধ্যায় (২,৩,১০)",
                 category: "Physics",
+                subject: "Physics",
                 grade: "HSC 26",
                 courseType: "ACS",
                 price: 1900,
@@ -1343,6 +1385,7 @@
                 title: "Physics Cycle-6 by Apurbo Mashrur Apar",
                 description: "দ্বিতীয় পত্র- অধ্যায় (৪,৫,৮)",
                 category: "Physics",
+                subject: "Physics",
                 grade: "HSC 26",
                 courseType: "ACS",
                 price: 1600,
@@ -1352,11 +1395,13 @@
                 rating: 4.9,
                 image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
             },
+                
             {
                 id: 7,
                 title: "University Admission 2025",
                 description: "Complete university admission preparation covering all major subjects and entrance exam techniques.",
                 category: "Admission",
+                subject: "General", // Added subject property
                 grade: "Admission 25",
                 courseType: "Bondi Pathshala",
                 price: 3000,
@@ -1371,6 +1416,7 @@
                 title: "HSC ICT 2025",
                 description: "Information and Communication Technology course for HSC 2025 with programming and database concepts.",
                 category: "ICT",
+                subject: "ICT", // Added subject property
                 grade: "HSC 25",
                 courseType: "CPS",
                 price: 1500,
@@ -1379,6 +1425,36 @@
                 students: 550,
                 rating: 4.3,
                 image: "https://images.unsplash.com/photo-1515378791036-0648a814c963?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 9,
+                title: "HSC Physics Advanced 2027",
+                description: "Advanced Physics course with laboratory experiments and theoretical concepts for HSC 2027 students.",
+                category: "Physics",
+                subject: "Physics", // Added subject property
+                grade: "HSC 27",
+                courseType: "ACS",
+                price: 2300,
+                originalPrice: 3100,
+                duration: "10 months",
+                students: 720,
+                rating: 4.8,
+                image: "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+            },
+            {
+                id: 10,
+                title: "HSC Chemistry Lab 2026",
+                description: "Hands-on Chemistry laboratory course with practical experiments and chemical analysis techniques.",
+                category: "Chemistry",
+                subject: "Chemistry", // Added subject property
+                grade: "HSC 26",
+                courseType: "Udavsh",
+                price: 2100,
+                originalPrice: 2900,
+                duration: "8 months",
+                students: 640,
+                rating: 4.7,
+                image: "https://images.unsplash.com/photo-1532634926-8f30ab96c00d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
             }
         ];
 
@@ -1386,6 +1462,7 @@
         let filteredCourses = [...mockCourses];
         let selectedGrade = 'All Grade/Level';
         let selectedCourse = 'All Course';
+        let selectedSubject = 'All Subject';
 
         // Check if device is mobile
         function isMobile() {
@@ -1401,27 +1478,30 @@
         // Function to toggle dropdown - modified for mobile popup
         function toggleDropdown(type) {
             if (isMobile()) {
-                // On mobile, show popup
                 const popup = document.getElementById(type + 'Popup');
                 popup.classList.add('active');
                 updatePopupSelections(type);
             } else {
-                // On desktop, show regular dropdown
                 const dropdown = document.getElementById(type + 'Dropdown');
                 const button = dropdown.previousElementSibling;
                 const arrow = button.querySelector('.dropdown-arrow');
-                
-                // Close other dropdown
-                const otherType = type === 'grade' ? 'course' : 'grade';
-                const otherDropdown = document.getElementById(otherType + 'Dropdown');
-                const otherButton = otherDropdown.previousElementSibling;
-                const otherArrow = otherButton.querySelector('.dropdown-arrow');
-                
-                otherDropdown.classList.remove('active');
-                otherButton.classList.remove('active');
-                otherArrow.classList.remove('rotated');
-                
-                // Toggle current dropdown
+
+                // Close other dropdowns
+                const dropdownTypes = ['grade', 'course', 'subject'];
+                dropdownTypes.forEach(otherType => {
+                    if (otherType !== type) {
+                        const otherDropdown = document.getElementById(otherType + 'Dropdown');
+                        if (otherDropdown) {
+                            const otherButton = otherDropdown.previousElementSibling;
+                            const otherArrow = otherButton.querySelector('.dropdown-arrow');
+                            otherDropdown.classList.remove('active');
+                            otherButton.classList.remove('active');
+                            otherArrow.classList.remove('rotated');
+                        }
+                    }
+                });
+
+                // Toggle current
                 dropdown.classList.toggle('active');
                 button.classList.toggle('active');
                 arrow.classList.toggle('rotated');
@@ -1438,8 +1518,12 @@
         function updatePopupSelections(type) {
             const popup = document.getElementById(type + 'Popup');
             const items = popup.querySelectorAll('.popup-item');
-            const currentSelection = type === 'grade' ? selectedGrade : selectedCourse;
-            
+
+            let currentSelection;
+            if (type === 'grade') currentSelection = selectedGrade;
+            else if (type === 'course') currentSelection = selectedCourse;
+            else if (type === 'subject') currentSelection = selectedSubject;
+
             items.forEach(item => {
                 item.classList.remove('selected');
                 if (item.textContent === currentSelection) {
@@ -1448,7 +1532,7 @@
             });
         }
 
-        // Function to select grade from popup
+        // Function to select grade from popup (Mobile)
         function selectGradeFromPopup(grade) {
             selectedGrade = grade;
             document.getElementById('gradeSelected').textContent = grade;
@@ -1456,7 +1540,7 @@
             filterCourses();
         }
 
-        // Function to select course from popup
+        // Function to select course from popup (Mobile)
         function selectCourseFromPopup(course) {
             selectedCourse = course;
             document.getElementById('courseSelected').textContent = course;
@@ -1464,45 +1548,64 @@
             filterCourses();
         }
 
-        // Function to select grade (for desktop)
+        // Function to select subject from popup (Mobile)
+        function selectSubjectFromPopup(subject) {
+            selectedSubject = subject;
+            document.getElementById('subjectSelected').textContent = subject;
+            closePopup('subject');
+            filterCourses();
+        }
+
+        // Function to select grade (Desktop)
         function selectGrade(grade) {
             selectedGrade = grade;
             document.getElementById('gradeSelected').textContent = grade;
-            document.getElementById('gradeDropdown').classList.remove('active');
-            document.querySelector('#gradeDropdown').previousElementSibling.classList.remove('active');
-            document.querySelector('#gradeDropdown').previousElementSibling.querySelector('.dropdown-arrow').classList.remove('rotated');
-            
-            // Update dropdown item selection
-            document.querySelectorAll('#gradeDropdown .dropdown-item').forEach(item => {
-                item.classList.remove('selected');
-                if (item.textContent === grade) {
-                    item.classList.add('selected');
-                }
-            });
-            
+            closeDropdown('gradeDropdown');
+            updateSelectedDropdownItem('#gradeDropdown', grade);
             filterCourses();
         }
 
-        // Function to select course (for desktop)
+        // Function to select course (Desktop)
         function selectCourse(course) {
             selectedCourse = course;
             document.getElementById('courseSelected').textContent = course;
-            document.getElementById('courseDropdown').classList.remove('active');
-            document.querySelector('#courseDropdown').previousElementSibling.classList.remove('active');
-            document.querySelector('#courseDropdown').previousElementSibling.querySelector('.dropdown-arrow').classList.remove('rotated');
-            
-            // Update dropdown item selection
-            document.querySelectorAll('#courseDropdown .dropdown-item').forEach(item => {
-                item.classList.remove('selected');
-                if (item.textContent === course) {
-                    item.classList.add('selected');
-                }
-            });
-            
+            closeDropdown('courseDropdown');
+            updateSelectedDropdownItem('#courseDropdown', course);
             filterCourses();
         }
 
-        // Function to filter courses
+        // Function to select subject (Desktop) - FIXED
+        function selectSubject(subject) {
+            selectedSubject = subject;
+            document.getElementById('subjectSelected').textContent = subject;
+            closeDropdown('subjectDropdown');
+            updateSelectedDropdownItem('#subjectDropdown', subject);
+            filterCourses();
+        }
+
+        // Utility to close a dropdown (Desktop)
+        function closeDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            if (!dropdown) return;
+
+            dropdown.classList.remove('active');
+            const button = dropdown.previousElementSibling;
+            button?.classList.remove('active');
+            button?.querySelector('.dropdown-arrow')?.classList.remove('rotated');
+        }
+
+        // Utility to update selected item in dropdown (Desktop)
+        function updateSelectedDropdownItem(selector, value) {
+            const items = document.querySelectorAll(`${selector} .dropdown-item`);
+            items.forEach(item => {
+                item.classList.remove('selected');
+                if (item.textContent === value) {
+                    item.classList.add('selected');
+                }
+            });
+        }
+
+        // Function to filter courses - FIXED
         function filterCourses() {
             let filtered = [...mockCourses];
 
@@ -1512,6 +1615,11 @@
 
             if (selectedCourse !== 'All Course') {
                 filtered = filtered.filter(course => course.courseType === selectedCourse);
+            }
+
+            // FIXED: Subject filtering now works correctly
+            if (selectedSubject !== 'All Subject') {
+                filtered = filtered.filter(course => course.subject === selectedSubject);
             }
 
             filteredCourses = filtered;
@@ -1605,15 +1713,23 @@
 
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize dropdown selections
+            // Initialize dropdown selections for Grade
             document.querySelectorAll('#gradeDropdown .dropdown-item').forEach(item => {
                 if (item.textContent === 'All Grade/Level') {
                     item.classList.add('selected');
                 }
             });
-            
+
+            // Initialize dropdown selections for Course
             document.querySelectorAll('#courseDropdown .dropdown-item').forEach(item => {
                 if (item.textContent === 'All Course') {
+                    item.classList.add('selected');
+                }
+            });
+
+            // Initialize dropdown selections for Subject - FIXED
+            document.querySelectorAll('#subjectDropdown .dropdown-item').forEach(item => {
+                if (item.textContent === 'All Subject') {
                     item.classList.add('selected');
                 }
             });
@@ -1659,18 +1775,23 @@
                 }
             });
 
-            // Close popups when clicking outside (mobile only)
+            // Close popups when clicking outside (mobile only) - FIXED
             document.addEventListener('click', function(e) {
                 if (isMobile()) {
                     const gradePopup = document.getElementById('gradePopup');
                     const coursePopup = document.getElementById('coursePopup');
-                    
+                    const subjectPopup = document.getElementById('subjectPopup');
+
                     if (gradePopup.classList.contains('active') && e.target === gradePopup) {
                         closePopup('grade');
                     }
-                    
+
                     if (coursePopup.classList.contains('active') && e.target === coursePopup) {
                         closePopup('course');
+                    }
+
+                    if (subjectPopup.classList.contains('active') && e.target === subjectPopup) {
+                        closePopup('subject');
                     }
                 }
             });
