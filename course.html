@@ -2167,9 +2167,9 @@
 
         // Global variables
         let filteredCourses = [...mockCourses];
-        let selectedGrade = 'All Grade/Level';
+        let selectedGrades = ['All Grade/Level'];
         let selectedCourse = 'All Course';
-        let selectedSubject = 'All Subject';
+        let selectedSubjects = ['All Subject'];
 
         // Check if device is mobile
         function isMobile() {
@@ -2314,25 +2314,31 @@
 
         // Function to filter courses - FIXED
         function filterCourses() {
-            let filtered = [...mockCourses];
+    let filtered = [...mockCourses];
 
-            if (selectedGrade !== 'All Grade/Level') {
-                filtered = filtered.filter(course => course.grade === selectedGrade);
+    // Grade filtering (multi)
+    if (!selectedGrades.includes('All Grade/Level')) {
+        filtered = filtered.filter(course => selectedGrades.includes(course.grade));
+    }
+
+    // CourseType filtering (still single-select)
+    if (selectedCourse !== 'All Course') {
+        filtered = filtered.filter(course => course.courseType === selectedCourse);
+    }
+
+    // Subject filtering (multi)
+    if (!selectedSubjects.includes('All Subject')) {
+        filtered = filtered.filter(course => {
+            if (Array.isArray(course.subject)) {
+                return course.subject.some(subject => selectedSubjects.includes(subject));
             }
+            return selectedSubjects.includes(course.subject);
+        });
+    }
 
-            if (selectedCourse !== 'All Course') {
-                filtered = filtered.filter(course => course.courseType === selectedCourse);
-            }
-
-            // FIXED: Subject filtering now works correctly
-            if (selectedSubject !== 'All Subject') {
-                filtered = filtered.filter(course => course.subject === selectedSubject);
-            }
-
-            filteredCourses = filtered;
-            renderCourses();
-        }
-
+    filteredCourses = filtered;
+    renderCourses();
+}
         // Function to render stars
         function renderStars(rating) {
             const stars = [];
